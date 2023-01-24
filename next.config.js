@@ -4,6 +4,7 @@ const withVanillaExtract = createVanillaExtractPlugin();
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	reactStrictMode: true,
+	transpilePackages: ["react-hook-form"],
 	redirects: async () => [
 		{ source: "/", destination: "/login", permanent: true },
 	],

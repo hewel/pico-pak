@@ -28,6 +28,6 @@ export const labelClass = style({
 	color: lightThemeVars.color.textColor,
 });
 
-export const eyeClass = style({
+export const inlineIconClass = style({
 	color: lightThemeVars.color.inlineIconColor,
 });

@@ -13,6 +13,9 @@
       }
     }
   },
+  "formatter": {
+    "lineWidth": 100
+  },
   "files": {
     "ignore": ["./gql/*.ts"]
   }
