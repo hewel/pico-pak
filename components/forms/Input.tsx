@@ -22,6 +22,7 @@ import {
 	labelClass,
 	inlineIconClass,
 	inputWarpFocusClass,
+	labelFoucsClass,
 } from "./Input.css";
 
 interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange"> {
@@ -58,6 +59,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 
 	useEffect(() => {
 		onChange?.(inputValue);
+		if (inputRef.current) inputRef.current.value = String(inputValue);
 	}, [inputValue]);
 
 	const [inputInlineElHovered, setInputInlineElHovered] = useState(false);
@@ -89,11 +91,21 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 
 	return (
 		<div
-			className={clsx("inline-flex flex-col mb-2 w-full", className)}
+			className={clsx("inline-flex relative flex-col mb-2 w-full", className)}
 			onMouseLeave={() => setInputInlineElHovered(false)}
 		>
 			{label && (
-				<label htmlFor={inputId} className={clsx("mb-1 text-sm", labelClass)}>
+				<label
+					htmlFor={inputId}
+					className={clsx(
+						"absolute text-sm pointer-events-none transition-all bg-transparent z-10",
+						labelClass,
+						focused || Boolean(inputValue)
+							? "-top-2 left-3 text-xs bottom-auto -mx-1 px-1 bg-white"
+							: "left-px px-3 py-2 inset-y-px",
+						focused && labelFoucsClass,
+					)}
+				>
 					{label}
 					{required && <span className="text-red-500 ml-0.5">*</span>}
 				</label>
@@ -102,19 +114,18 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 				className={clsx(
 					"relative w-full rounded-md border transition",
 					inputWarpClass,
+					focused && "hover:ring-1",
 					focused && inputWarpFocusClass,
-					focused && "ring-2 hover:ring-offset-1",
 				)}
 			>
 				<input
 					id={inputId}
 					className={clsx(
-						"px-3 py-2 text-sm w-full rounded-md border-0 border-current",
+						"px-3 py-2 text-sm w-full rounded-md border-0 border-current bg-transparent",
 						"focus:outline-none",
 						inputClass,
 					)}
 					type={isTypePassword ? passwordType : type}
-					value={inputValue}
 					ref={mergedRef}
 					disabled={disabled}
 					onChange={(ev) => setInputValue(ev.target.value)}
